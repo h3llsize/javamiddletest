@@ -1,6 +1,8 @@
 package org.shabbydev.test.middlejavadevelopertest.logic.service;
 
 import javax.transaction.Transactional;
+
+import org.shabbydev.test.middlejavadevelopertest.data.dtos.Authorization;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.UserDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.AuthorizationEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
@@ -37,7 +39,7 @@ public class RegisterService {
     }
 
     // I don't save users passwords in MD5 hash
-    public ResponseEntity<String> register(UserDTO userDTO, String remoteAddr) {
+    public ResponseEntity<Authorization> register(UserDTO userDTO, String remoteAddr) {
 
         String hash = tokenGenerator.genAuth(
                 userService.save(userMapper.toEntity(userDTO)),
@@ -45,14 +47,13 @@ public class RegisterService {
         ).getHash();
 
         return ResponseEntity.ok()
-                .headers(new AuthHeadersGenerator(hash))
-                .body("User was successful saved");
+                .body(Authorization.builder().token(hash).build());
     }
 
-    public ResponseEntity<String> login(UserDTO userDTO, String remoteAddr) {
+    public ResponseEntity<Authorization> login(UserDTO userDTO, String remoteAddr) {
 
-        return userService.validateLogin(userDTO) ? ResponseEntity.ok().headers(new AuthHeadersGenerator(
-                tokenGenerator.genAuth(userService.findByEmail(userDTO.getEmail()), remoteAddr).getHash()
-        )).body("Login was successful") : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad login");
+        return userService.validateLogin(userDTO) ? ResponseEntity.ok().body(Authorization.builder().token(
+                tokenGenerator.genAuth(userService.findByEmail(userDTO.getEmail()), remoteAddr).getHash()).build()) :
+                null;
     }
 }

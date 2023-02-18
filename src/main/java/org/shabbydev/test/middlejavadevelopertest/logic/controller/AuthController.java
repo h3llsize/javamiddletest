@@ -1,5 +1,6 @@
 package org.shabbydev.test.middlejavadevelopertest.logic.controller;
 
+import org.shabbydev.test.middlejavadevelopertest.data.dtos.Authorization;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.UserDTO;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.RegisterService;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.ValidateService;
@@ -26,7 +27,7 @@ public class AuthController {
     private final ValidateService validateService;
 
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Authorization> register(@RequestBody UserDTO userDTO, HttpServletRequest httpServletRequest) {
         logger.debug("Request to register user : " + userDTO.getEmail());
         return registerService.register(userDTO, httpServletRequest.getRemoteAddr());
     }
@@ -39,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> login (@RequestBody UserDTO userDTO, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Authorization> login (@RequestBody UserDTO userDTO, HttpServletRequest httpServletRequest) {
         logger.debug("Request to login user : " + userDTO.getEmail());
         return registerService.login(userDTO, httpServletRequest.getRemoteAddr());
     }

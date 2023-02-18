@@ -28,7 +28,7 @@ public class TokenGenerator {
     public AuthorizationEntity genAuth(UserEntity user, String remoteAddr) {
 
         if(authorizationRepository.existsByHash(genToken(user, remoteAddr)))
-            authorizationRepository.delete(authorizationRepository.findByHash(genToken(user, remoteAddr)));
+            return authorizationRepository.findByHash(genToken(user, remoteAddr));
 
         AuthorizationEntity authorization = new AuthorizationEntity();
         authorization.setHash(genToken(user, remoteAddr));

@@ -27,9 +27,6 @@ public class UserEntity {
     private String name;
 
     @Column(nullable = false)
-    private String surname;
-
-    @Column(nullable = false)
     private String password;
 
     @OneToMany

@@ -1,6 +1,7 @@
 package org.shabbydev.test.middlejavadevelopertest.data.repo;
 
 import org.shabbydev.test.middlejavadevelopertest.data.entity.MunicipalServ;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface MunicipalServRepository extends JpaRepository<MunicipalServ, Lo
                     " where ms.interdepartmentalRequestEntities.size > 0"
     )
     Page<MunicipalServ> findAllHasRequest(Pageable pageable);
+
+    Page<MunicipalServ> findAllByOrganizationEntity(OrganizationEntity organization, Pageable pageable);
 }

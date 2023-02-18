@@ -27,4 +27,7 @@ public class InterdepartmentalRequestEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity author;
+
+    @Column(nullable = false)
+    private int status;
 }

@@ -3,6 +3,7 @@ package org.shabbydev.test.middlejavadevelopertest.logic.service;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.InterdepartmentalRequestDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.InterdepartmentalTypeDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.MunicipalServDTO;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalRequestMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalTypeMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.MunicipalServMapper;
@@ -28,13 +29,16 @@ public class InterdepartmentalManagerService {
 
     private final MunicipalServMapper municipalServMapper;
 
-    public InterdepartmentalManagerService(InterdepartmentalRequestRepository interdepartmentalRequestRepository, InterdepartmentalRequestMapper interdepartmentalRequestMapperDecorator, InterdepartmentalTypeRepository interdepartmentalTypeRepository, InterdepartmentalTypeMapper interdepartmentalTypeMapper, MunicipalServRepository municipalServRepository, MunicipalServMapper municipalServMapper) {
+    private final ValidateService validateService;
+
+    public InterdepartmentalManagerService(InterdepartmentalRequestRepository interdepartmentalRequestRepository, InterdepartmentalRequestMapper interdepartmentalRequestMapperDecorator, InterdepartmentalTypeRepository interdepartmentalTypeRepository, InterdepartmentalTypeMapper interdepartmentalTypeMapper, MunicipalServRepository municipalServRepository, MunicipalServMapper municipalServMapper, ValidateService validateService) {
         this.interdepartmentalRequestRepository = interdepartmentalRequestRepository;
         this.interdepartmentalRequestMapper = interdepartmentalRequestMapperDecorator;
         this.interdepartmentalTypeRepository = interdepartmentalTypeRepository;
         this.interdepartmentalTypeMapper = interdepartmentalTypeMapper;
         this.municipalServRepository = municipalServRepository;
         this.municipalServMapper = municipalServMapper;
+        this.validateService = validateService;
     }
 
     public Page<InterdepartmentalTypeDTO> findAll() {
@@ -42,11 +46,25 @@ public class InterdepartmentalManagerService {
     }
 
     public ResponseEntity<String> save(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
+        interdepartmentalRequestDTO.setStatus(0);
         interdepartmentalRequestRepository.save(interdepartmentalRequestMapper.toEntity(interdepartmentalRequestDTO));
         return ResponseEntity.ok("Межведомственный запрос был успешно добавлен!");
     }
 
     public Page<MunicipalServDTO> hasRequest() {
         return municipalServRepository.findAllHasRequest(Pageable.unpaged()).map(municipalServMapper::toDTO);
+    }
+
+    public Page<MunicipalServDTO> findAllByOrganization(String token) {
+        OrganizationEntity organization = validateService.findByHashToken(token).getOrganizationEntity();
+
+        if(organization == null)
+            return null;
+
+        return municipalServRepository.findAllByOrganizationEntity(organization, Pageable.unpaged()).map(municipalServMapper::toDTO);
+    }
+
+    public MunicipalServDTO findById(String id) {
+        return municipalServRepository.findById(Long.valueOf(id)).map(municipalServMapper::toDTO).orElse(null);
     }
 }
