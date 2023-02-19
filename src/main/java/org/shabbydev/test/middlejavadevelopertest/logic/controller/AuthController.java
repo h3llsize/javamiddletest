@@ -50,7 +50,7 @@ public class AuthController {
         if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
             return null;
 
-        if(validateService.hasAccess(httpServletRequest.getHeader("Authorization")))
+        if(!validateService.hasAccess(httpServletRequest.getHeader("Authorization")))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad token");
 
         return ResponseEntity.ok("Success");
