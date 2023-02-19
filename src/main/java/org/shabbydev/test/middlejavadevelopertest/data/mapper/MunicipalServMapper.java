@@ -10,6 +10,7 @@ import org.shabbydev.test.middlejavadevelopertest.data.mapper.decorator.Municipa
 public interface MunicipalServMapper {
 
     @Mapping(target = "interdepartmentalRequestEntities[].type", ignore = true )
+    @Mapping(target = "time", ignore = true)
     MunicipalServ toEntity(MunicipalServDTO municipalServDTO);
     MunicipalServDTO toDTO(MunicipalServ municipalServ);
 }

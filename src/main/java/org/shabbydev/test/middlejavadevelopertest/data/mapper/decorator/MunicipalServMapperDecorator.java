@@ -12,14 +12,12 @@ import org.shabbydev.test.middlejavadevelopertest.data.mapper.OrganizationMapper
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = OrganizationMapper.class)
 public abstract class MunicipalServMapperDecorator {
 
     @Autowired
@@ -46,11 +44,8 @@ public abstract class MunicipalServMapperDecorator {
 
     @AfterMapping
     public void toEntity(MunicipalServDTO municipalServDTO, @MappingTarget MunicipalServ municipalServ) {
-        String pattern = "dd.MM HH:mm";
-        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(pattern)
-                .parseDefaulting(ChronoField.YEAR, Year.now().getValue()).toFormatter();
-        LocalDateTime localDateTime = LocalDateTime.parse(municipalServDTO.getTime(), dateTimeFormatter);
-        municipalServ.setTime(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        municipalServ.setTime(LocalDateTime.parse(municipalServDTO.getTime(),
+                DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.US)).toInstant(ZoneOffset.UTC));
         municipalServ.setOrganizationEntity(organizationMapper.toEntity(municipalServDTO.getOrganization()));
     }
 }

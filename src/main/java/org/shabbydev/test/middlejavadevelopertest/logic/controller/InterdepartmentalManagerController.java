@@ -4,7 +4,6 @@ import org.shabbydev.test.middlejavadevelopertest.data.dtos.*;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.InterdepartmentalManagerService;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.ValidateService;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
