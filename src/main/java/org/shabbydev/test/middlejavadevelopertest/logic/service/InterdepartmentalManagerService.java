@@ -3,10 +3,13 @@ package org.shabbydev.test.middlejavadevelopertest.logic.service;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.InterdepartmentalRequestDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.InterdepartmentalTypeDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.MunicipalServDTO;
+import org.shabbydev.test.middlejavadevelopertest.data.dtos.UserDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalRequestMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalTypeMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.MunicipalServMapper;
+import org.shabbydev.test.middlejavadevelopertest.data.mapper.UserMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.repo.InterdepartmentalRequestRepository;
 import org.shabbydev.test.middlejavadevelopertest.data.repo.InterdepartmentalTypeRepository;
 import org.shabbydev.test.middlejavadevelopertest.data.repo.MunicipalServRepository;
@@ -14,6 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class InterdepartmentalManagerService {
@@ -31,7 +37,9 @@ public class InterdepartmentalManagerService {
 
     private final ValidateService validateService;
 
-    public InterdepartmentalManagerService(InterdepartmentalRequestRepository interdepartmentalRequestRepository, InterdepartmentalRequestMapper interdepartmentalRequestMapperDecorator, InterdepartmentalTypeRepository interdepartmentalTypeRepository, InterdepartmentalTypeMapper interdepartmentalTypeMapper, MunicipalServRepository municipalServRepository, MunicipalServMapper municipalServMapper, ValidateService validateService) {
+    private final UserMapper userMapper;
+
+    public InterdepartmentalManagerService(InterdepartmentalRequestRepository interdepartmentalRequestRepository, InterdepartmentalRequestMapper interdepartmentalRequestMapperDecorator, InterdepartmentalTypeRepository interdepartmentalTypeRepository, InterdepartmentalTypeMapper interdepartmentalTypeMapper, MunicipalServRepository municipalServRepository, MunicipalServMapper municipalServMapper, ValidateService validateService, UserMapper userMapper) {
         this.interdepartmentalRequestRepository = interdepartmentalRequestRepository;
         this.interdepartmentalRequestMapper = interdepartmentalRequestMapperDecorator;
         this.interdepartmentalTypeRepository = interdepartmentalTypeRepository;
@@ -39,10 +47,20 @@ public class InterdepartmentalManagerService {
         this.municipalServRepository = municipalServRepository;
         this.municipalServMapper = municipalServMapper;
         this.validateService = validateService;
+        this.userMapper = userMapper;
     }
 
     public Page<InterdepartmentalTypeDTO> findAll() {
         return interdepartmentalTypeRepository.findAll(Pageable.unpaged()).map(interdepartmentalTypeMapper::toDTO);
+    }
+
+    public Page<InterdepartmentalRequestDTO> getAllWhoWaitForSuccess() {
+        return interdepartmentalRequestRepository.findAllByStatus(0, Pageable.unpaged()).map(interdepartmentalRequestMapper::toDTO);
+    }
+
+    public ResponseEntity<String> acceptIDMRequest(Long id) {
+        interdepartmentalRequestRepository.findById(id).orElseGet(null).status(1);
+        return ResponseEntity.ok("Статус запроса изменён");
     }
 
     public ResponseEntity<String> save(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
@@ -62,6 +80,21 @@ public class InterdepartmentalManagerService {
             return null;
 
         return municipalServRepository.findAllByOrganizationEntity(organization, Pageable.unpaged()).map(municipalServMapper::toDTO);
+    }
+
+    public ResponseEntity<String> createIdm(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
+        interdepartmentalRequestRepository.save(interdepartmentalRequestMapper.toEntity(interdepartmentalRequestDTO));
+        return ResponseEntity.ok("Success created");
+    }
+
+    public ResponseEntity<String> createMunicipalServ(MunicipalServDTO municipalServDTO) {
+        municipalServRepository.save(municipalServMapper.toEntity(municipalServDTO));
+        return ResponseEntity.ok("Success sended");
+    }
+
+    public Set<UserDTO> findAllStaffByOrg(String token) {
+        UserEntity user = validateService.findByHashToken(token);
+        return user.getOrganizationEntity().getStaff().stream().map(userMapper::toDTO).collect(Collectors.toSet());
     }
 
     public MunicipalServDTO findById(String id) {

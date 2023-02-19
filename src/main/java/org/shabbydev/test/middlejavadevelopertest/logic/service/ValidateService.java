@@ -34,6 +34,10 @@ public class ValidateService {
         ));
     }
 
+    public boolean hasAccess(String token) {
+        return findByHashToken(token).getRole() > 0;
+    }
+
     public UserEntity findByHashToken(String token) {
         return authorizationRepository.findByHash(token).getUser();
     }

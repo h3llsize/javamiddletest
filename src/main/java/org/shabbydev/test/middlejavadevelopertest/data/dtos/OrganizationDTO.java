@@ -9,11 +9,11 @@ public class OrganizationDTO {
 
     private String name;
 
-    private String INN;
+    private String inn;
 
     private String subdivision;
 
-    private String KPP;
+    private String kpp;
 
     private UserDTO owner;
 

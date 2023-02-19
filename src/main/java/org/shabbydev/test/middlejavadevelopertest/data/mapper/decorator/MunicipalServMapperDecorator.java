@@ -35,11 +35,11 @@ public abstract class MunicipalServMapperDecorator {
             municipalServDTO.setInterdepartmentalRequestEntities(municipalServ.getInterdepartmentalRequestEntities()
                 .stream().map(interdepartmentalRequestMapper::toDTO).collect(Collectors.toSet()));
 
-        municipalServDTO.setOrganizationDTO(organizationMapper.toDTO(municipalServ.getOrganizationEntity()));
+        municipalServDTO.setOrganization(organizationMapper.toDTO(municipalServ.getOrganizationEntity()));
     }
 
     @AfterMapping
     public void toEntity(MunicipalServDTO municipalServDTO, @MappingTarget MunicipalServ municipalServ) {
-        municipalServ.setOrganizationEntity(organizationMapper.toEntity(municipalServDTO.getOrganizationDTO()));
+        municipalServ.setOrganizationEntity(organizationMapper.toEntity(municipalServDTO.getOrganization()));
     }
 }

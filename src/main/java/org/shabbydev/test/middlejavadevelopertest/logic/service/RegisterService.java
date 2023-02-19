@@ -41,6 +41,8 @@ public class RegisterService {
     // I don't save users passwords in MD5 hash
     public ResponseEntity<Authorization> register(UserDTO userDTO, String remoteAddr) {
 
+        userDTO.setRole(0);
+
         String hash = tokenGenerator.genAuth(
                 userService.save(userMapper.toEntity(userDTO)),
                 remoteAddr

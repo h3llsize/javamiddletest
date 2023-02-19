@@ -22,13 +22,13 @@ public class OrganizationEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String INN;
+    private String inn;
 
     @Column(nullable = false)
     private String subdivision;
 
     @Column(nullable = false, unique = true)
-    private String KPP;
+    private String kpp;
 
     @OneToOne(fetch = FetchType.LAZY)
     private UserEntity owner;

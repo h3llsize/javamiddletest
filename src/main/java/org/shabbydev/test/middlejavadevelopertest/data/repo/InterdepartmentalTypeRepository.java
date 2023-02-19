@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InterdepartmentalTypeRepository extends JpaRepository<InterdepartmentalTypeEntity, Long> {
     Page<InterdepartmentalTypeEntity> findAll(Pageable pageable);
+
 }

@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthorizationRepository extends JpaRepository<AuthorizationEntity, Long> {
     AuthorizationEntity findByHash(String hash);
-
     boolean existsByHash(String hash);
 }

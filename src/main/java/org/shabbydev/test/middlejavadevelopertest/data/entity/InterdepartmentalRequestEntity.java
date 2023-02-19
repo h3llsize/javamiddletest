@@ -25,9 +25,14 @@ public class InterdepartmentalRequestEntity {
     @Column(nullable = false)
     private Instant date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserEntity author;
 
     @Column(nullable = false)
     private int status;
+
+    public InterdepartmentalRequestEntity status(int status) {
+        this.status = status;
+        return this;
+    }
 }

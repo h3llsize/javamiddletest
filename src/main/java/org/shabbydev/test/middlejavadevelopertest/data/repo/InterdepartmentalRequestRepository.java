@@ -1,6 +1,7 @@
 package org.shabbydev.test.middlejavadevelopertest.data.repo;
 
 import org.shabbydev.test.middlejavadevelopertest.data.entity.InterdepartmentalRequestEntity;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.InterdepartmentalTypeEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,6 @@ public interface InterdepartmentalRequestRepository extends JpaRepository<Interd
 //            "where ms.organizationEntity = :organization " +
 //            "and ir = ANY (ms.interdepartmentalRequestEntities)")
 //    Page<InterdepartmentalRequestEntity> findAllByOrganization(OrganizationEntity organization, Pageable pageable);
+
+    Page<InterdepartmentalRequestEntity> findAllByStatus(int status, Pageable pageable);
 }

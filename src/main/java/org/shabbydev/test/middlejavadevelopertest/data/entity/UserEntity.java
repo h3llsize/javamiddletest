@@ -39,4 +39,6 @@ public class UserEntity {
         this.organizationEntity = organization;
         return this;
     }
+    @Column(nullable = false)
+    private int role;
 }

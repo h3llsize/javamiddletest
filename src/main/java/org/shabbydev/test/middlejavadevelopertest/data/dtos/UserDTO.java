@@ -13,4 +13,6 @@ public class UserDTO {
     private OrganizationDTO organizationDTO;
 
     private String password;
+
+    private int role;
 }

@@ -5,12 +5,10 @@ import org.shabbydev.test.middlejavadevelopertest.data.dtos.UserDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.OrganizationMapper;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.OrganizationService;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.ValidateService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,6 +31,14 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad token");
 
         return organizationService.create(organizationDTO, httpServletRequest.getHeader("Authorization"));
+    }
+
+    @GetMapping("")
+    public Page<OrganizationDTO> getAllOrganization(HttpServletRequest httpServletRequest) {
+        if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
+            return null;
+
+        return organizationService.getAllOrganization();
     }
 
     @PostMapping("add-staff")

@@ -15,5 +15,7 @@ public class MunicipalServDTO {
 
     private Set<InterdepartmentalDocumentDTO> interdepartmentalDocuments;
 
-    private OrganizationDTO organizationDTO;
+    private OrganizationDTO organization;
+
+    private String time;
 }

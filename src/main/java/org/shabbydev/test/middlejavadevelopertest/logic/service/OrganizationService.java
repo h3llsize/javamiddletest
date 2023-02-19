@@ -7,6 +7,8 @@ import org.shabbydev.test.middlejavadevelopertest.data.mapper.OrganizationMapper
 import org.shabbydev.test.middlejavadevelopertest.data.repo.OrganizationRepository;
 import org.shabbydev.test.middlejavadevelopertest.data.repo.UserRepository;
 import org.shabbydev.test.middlejavadevelopertest.logic.utils.AuthHeadersGenerator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class OrganizationService {
     }
 
     public OrganizationEntity save(OrganizationEntity organization) {
-        if(organizationRepository.existsByName(organization.getName()) || organizationRepository.existsByINN(organization.getINN()))
+        if(organizationRepository.existsByName(organization.getName()) || organizationRepository.existsByInn(organization.getInn()))
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
 
         return organizationRepository.save(organization);
@@ -45,6 +47,10 @@ public class OrganizationService {
                 save(organizationMapper.toEntity(organizationDTO).owner(validateService.findByHashToken(token)))));
 
         return ResponseEntity.ok("Successful created organization");
+    }
+
+    public Page<OrganizationDTO> getAllOrganization() {
+        return organizationRepository.findAll(Pageable.unpaged()).map(organizationMapper::toDTO);
     }
 
     public ResponseEntity<String> addStaff(UserDTO userDTO, String token) {

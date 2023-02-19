@@ -7,11 +7,12 @@ import org.mapstruct.MappingTarget;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.InterdepartmentalRequestDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.InterdepartmentalRequestEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalTypeMapper;
+import org.shabbydev.test.middlejavadevelopertest.data.mapper.UserMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.repo.InterdepartmentalTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class)
 @Primary
 public abstract class InterdepartmentalRequestMapperDecorator {
 

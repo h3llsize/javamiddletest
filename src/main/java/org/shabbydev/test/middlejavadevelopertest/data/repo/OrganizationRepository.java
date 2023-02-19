@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrganizationRepository extends JpaRepository<OrganizationEntity, Long> {
-    boolean existsByINN(String INN);
+    boolean existsByInn(String INN);
     boolean existsByName(String name);
 
     Optional<OrganizationEntity> findByOwner(UserEntity user);
