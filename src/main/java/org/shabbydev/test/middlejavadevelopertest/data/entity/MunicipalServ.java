@@ -4,6 +4,7 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -26,4 +27,7 @@ public class MunicipalServ {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private OrganizationEntity organizationEntity;
+
+    @Column(nullable = false)
+    private Instant time;
 }

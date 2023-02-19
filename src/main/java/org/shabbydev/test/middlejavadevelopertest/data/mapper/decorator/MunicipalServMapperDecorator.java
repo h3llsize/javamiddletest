@@ -11,6 +11,12 @@ import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalR
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.OrganizationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -40,6 +46,11 @@ public abstract class MunicipalServMapperDecorator {
 
     @AfterMapping
     public void toEntity(MunicipalServDTO municipalServDTO, @MappingTarget MunicipalServ municipalServ) {
+        String pattern = "dd.MM HH:mm";
+        DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(pattern)
+                .parseDefaulting(ChronoField.YEAR, Year.now().getValue()).toFormatter();
+        LocalDateTime localDateTime = LocalDateTime.parse(municipalServDTO.getTime(), dateTimeFormatter);
+        municipalServ.setTime(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         municipalServ.setOrganizationEntity(organizationMapper.toEntity(municipalServDTO.getOrganization()));
     }
 }
