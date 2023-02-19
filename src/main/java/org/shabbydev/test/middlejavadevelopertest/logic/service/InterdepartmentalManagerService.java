@@ -1,6 +1,7 @@
 package org.shabbydev.test.middlejavadevelopertest.logic.service;
 
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.*;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.InterdepartmentalRequestEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.*;
@@ -88,9 +89,16 @@ public class InterdepartmentalManagerService {
     public ResponseEntity<String> createIdm(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
         interdepartmentalRequestDTO.setDate(Instant.now());
 
+        InterdepartmentalRequestEntity interdepartmentalRequestEntity = interdepartmentalRequestRepository.save(
+                interdepartmentalRequestMapper.toEntity(interdepartmentalRequestDTO)
+        );
+
+        municipalServRepository.save(municipalServRepository.findById(interdepartmentalRequestDTO.getMunicipalServ()
+                .getId()).orElse(null).addRequest(interdepartmentalRequestEntity));
+
+
         userRepository.save(userRepository.findById(interdepartmentalRequestDTO.getUser().getId())
-                .orElseGet(null).interdepartmentalRequest(interdepartmentalRequestRepository
-                        .save(interdepartmentalRequestMapper.toEntity(interdepartmentalRequestDTO))));
+                .orElseGet(null).interdepartmentalRequest(interdepartmentalRequestEntity));
 
         return ResponseEntity.ok("Success created");
     }

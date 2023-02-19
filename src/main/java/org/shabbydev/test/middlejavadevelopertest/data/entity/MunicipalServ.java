@@ -30,4 +30,9 @@ public class MunicipalServ {
 
     @Column(nullable = false)
     private Instant time;
+
+    public MunicipalServ addRequest(InterdepartmentalRequestEntity interdepartmentalRequestEntity) {
+        this.interdepartmentalRequestEntities.add(interdepartmentalRequestEntity);
+        return this;
+    }
 }
