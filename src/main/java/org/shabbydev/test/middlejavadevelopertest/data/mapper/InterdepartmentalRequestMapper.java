@@ -12,7 +12,7 @@ public interface InterdepartmentalRequestMapper {
 
     @Mapping(target = "user", ignore = true)
     InterdepartmentalRequestDTO toDTO(InterdepartmentalRequestEntity interdepartmentalRequestEntity);
-    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "author", ignore = true)
     InterdepartmentalRequestEntity toEntity(InterdepartmentalRequestDTO interdepartmentalRequestDTO);
 
 }
