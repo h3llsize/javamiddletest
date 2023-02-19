@@ -122,9 +122,8 @@ public class InterdepartmentalManagerService {
     public ResponseEntity<String> createIdm(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
         interdepartmentalRequestDTO.setDate(Instant.now());
 
-        InterdepartmentalRequestEntity interdepartmentalRequestEntity = interdepartmentalRequestRepository.save(
-                interdepartmentalRequestMapper.toEntity(interdepartmentalRequestDTO)
-        );
+        InterdepartmentalRequestEntity interdepartmentalRequestEntity = interdepartmentalRequestRepository.save(interdepartmentalRequestMapper.toEntity(interdepartmentalRequestDTO)
+                .user(userRepository.findById(interdepartmentalRequestDTO.getUser().getId()).orElse(null)));
 
         municipalServRepository.save(municipalServRepository.findById(interdepartmentalRequestDTO.getMunicipalServ()
                 .getId()).orElse(null).addRequest(interdepartmentalRequestEntity));

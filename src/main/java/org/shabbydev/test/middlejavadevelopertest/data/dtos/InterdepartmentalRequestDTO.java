@@ -15,6 +15,8 @@ public class InterdepartmentalRequestDTO {
 
     private UserDtoRequest user;
 
+    private OrganizationDTO organization;
+
     private MunicipalServDTO municipalServ;
 
     //0 - wait for subscribe

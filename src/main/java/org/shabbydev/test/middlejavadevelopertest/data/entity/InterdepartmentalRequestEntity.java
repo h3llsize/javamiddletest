@@ -35,4 +35,9 @@ public class InterdepartmentalRequestEntity {
         this.status = status;
         return this;
     }
+
+    public InterdepartmentalRequestEntity user(UserEntity user) {
+        this.author = (user);
+        return this;
+    }
 }

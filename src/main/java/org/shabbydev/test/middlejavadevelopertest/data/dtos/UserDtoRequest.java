@@ -8,5 +8,5 @@ public class UserDtoRequest {
 
     private String name;
 
-    private String organization;
+    private OrganizationDTO organization;
 }

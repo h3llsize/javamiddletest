@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.OrganizationDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
 
-@Mapper(componentModel = "spring", uses = UserMapper.class)
+@Mapper(componentModel = "spring")
 public interface OrganizationMapper {
     OrganizationEntity toEntity(OrganizationDTO organizationDTO);
 

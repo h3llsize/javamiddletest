@@ -34,8 +34,7 @@ public abstract class InterdepartmentalRequestMapperDecorator {
     public void toEntity(InterdepartmentalRequestDTO interdepartmentalRequestDTO, @MappingTarget InterdepartmentalRequestEntity interdepartmentalRequestEntity) {
 
         UserEntity user = new UserEntity();
-        user.setId(1L);
-
+        user.setId(interdepartmentalRequestDTO.getId());
         interdepartmentalRequestEntity.setAuthor(user);
         interdepartmentalRequestEntity.setType(interdepartmentalTypeMapper.toEntity(interdepartmentalRequestDTO.getType()));
     }

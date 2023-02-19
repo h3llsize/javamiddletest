@@ -10,7 +10,7 @@ public class UserDTO {
 
     private String name;
 
-    private OrganizationDTO organizationDTO;
+    private OrganizationDTO organization;
 
     private String password;
 

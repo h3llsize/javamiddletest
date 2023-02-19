@@ -6,7 +6,7 @@ import org.shabbydev.test.middlejavadevelopertest.data.dtos.UserDTO;
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.UserDtoRequest;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
 
-@Mapper(componentModel = "spring", uses = UserRequestMapper.class)
+@Mapper(componentModel = "spring", uses = OrganizationMapper.class)
 public interface UserRequestMapper {
     @Mapping(target = "organization", ignore = true)
     UserEntity toEntity(UserDtoRequest userDTO);
