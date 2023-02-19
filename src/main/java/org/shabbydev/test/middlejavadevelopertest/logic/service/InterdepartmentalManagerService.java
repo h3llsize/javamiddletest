@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,9 @@ public class InterdepartmentalManagerService {
 
     private final UserRequestMapper userRequestMapper;
 
-    public InterdepartmentalManagerService(InterdepartmentalRequestRepository interdepartmentalRequestRepository, InterdepartmentalRequestMapper interdepartmentalRequestMapperDecorator, InterdepartmentalTypeRepository interdepartmentalTypeRepository, InterdepartmentalTypeMapper interdepartmentalTypeMapper, MunicipalServRepository municipalServRepository, MunicipalServMapper municipalServMapper, ValidateService validateService, UserMapper userMapper, UserRepository userRepository, UserRequestMapper userRequestMapper) {
+    private final OrganizationMapper organizationMapper;
+
+    public InterdepartmentalManagerService(InterdepartmentalRequestRepository interdepartmentalRequestRepository, InterdepartmentalRequestMapper interdepartmentalRequestMapperDecorator, InterdepartmentalTypeRepository interdepartmentalTypeRepository, InterdepartmentalTypeMapper interdepartmentalTypeMapper, MunicipalServRepository municipalServRepository, MunicipalServMapper municipalServMapper, ValidateService validateService, UserMapper userMapper, UserRepository userRepository, UserRequestMapper userRequestMapper, OrganizationMapper organizationMapper) {
         this.interdepartmentalRequestRepository = interdepartmentalRequestRepository;
         this.interdepartmentalRequestMapper = interdepartmentalRequestMapperDecorator;
         this.interdepartmentalTypeRepository = interdepartmentalTypeRepository;
@@ -52,6 +55,21 @@ public class InterdepartmentalManagerService {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.userRequestMapper = userRequestMapper;
+        this.organizationMapper = organizationMapper;
+    }
+
+    public List<UserResponsibleRequestDTO> getUserResponsible(String token) {
+        UserEntity user = validateService.findByHashToken(token);
+
+        List<MunicipalServ> municipalServs = municipalServRepository.findAllByResponsibleUser(user);
+        return municipalServs.stream().map(municipalServ -> {
+            UserResponsibleRequestDTO userResponsibleRequestDTO = new UserResponsibleRequestDTO();
+            userResponsibleRequestDTO.setOrganizationDTO(organizationMapper.toDTO(municipalServ.getOrganizationEntity()));
+            userResponsibleRequestDTO.setInterdepartmentalRequestDTO(municipalServ
+                    .getInterdepartmentalRequestEntities().stream().filter(irq -> irq.getAuthor().getId().equals(user.getId()))
+                    .map(interdepartmentalRequestMapper::toDTO).collect(Collectors.toList()));
+            return userResponsibleRequestDTO;
+        }).collect(Collectors.toList());
     }
 
     public Page<InterdepartmentalTypeDTO> findAll() {
@@ -84,15 +102,15 @@ public class InterdepartmentalManagerService {
         if(organization == null)
             return null;
 
-        return municipalServRepository.findAllByOrganizationEntity(organization, Pageable.unpaged()).map(m -> {
-            m.getInterdepartmentalRequestEntities().stream().map(ir -> {
-                if(ir.getStatus() < 1) return null;
-                return ir;
-            });
+        Page<MunicipalServDTO> municipalServDTOS = municipalServRepository.findAllByOrganizationEntity(organization, Pageable.unpaged())
+                .map(municipalServMapper::toDTO);
 
-            return municipalServMapper.toDTO(m);
-        });
+        for(MunicipalServDTO municipalServ : municipalServDTOS) {
+            municipalServ.setInterdepartmentalRequestEntities(municipalServ.getInterdepartmentalRequestEntities()
+                    .stream().filter(ir -> ir.getStatus() > 0).collect(Collectors.toSet()));
+        }
 
+        return municipalServDTOS;
     }
 
     public ResponseEntity<String> createIdm(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {

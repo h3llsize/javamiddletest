@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Set;
 
 @RequestMapping("/api/idm")
@@ -21,6 +22,14 @@ public class InterdepartmentalManagerController {
     public InterdepartmentalManagerController(InterdepartmentalManagerService interdepartmentalManagerService, ValidateService validateService) {
         this.interdepartmentalManagerService = interdepartmentalManagerService;
         this.validateService = validateService;
+    }
+
+    @GetMapping("/get-user-responsible")
+    public List<UserResponsibleRequestDTO> userResponsibleRequestDTOS(HttpServletRequest httpServletRequest) {
+        if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
+            return null;
+
+        return interdepartmentalManagerService.getUserResponsible(httpServletRequest.getHeader("Authorization"));
     }
 
     @PostMapping("/send-to-smev")

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MunicipalServRepository extends JpaRepository<MunicipalServ, Long> {
     @Query(
@@ -18,4 +20,8 @@ public interface MunicipalServRepository extends JpaRepository<MunicipalServ, Lo
     Page<MunicipalServ> findAllHasRequest(Pageable pageable);
 
     Page<MunicipalServ> findAllByOrganizationEntity(OrganizationEntity organization, Pageable pageable);
+
+    @Query("select ms from MunicipalServ ms join ms.interdepartmentalRequestEntities ir " +
+            "where ir.author = :user")
+    List<MunicipalServ> findAllByResponsibleUser(UserEntity user);
 }
