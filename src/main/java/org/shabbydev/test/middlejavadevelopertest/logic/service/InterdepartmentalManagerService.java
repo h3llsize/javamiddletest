@@ -74,6 +74,10 @@ public class InterdepartmentalManagerService {
         return userResponsibleRequestDTOS;
     }
 
+    public Page<MunicipalServDTO> findMsWithRequests() {
+        return municipalServRepository.findMsWithRequests(Pageable.unpaged()).map(municipalServMapper::toDTO);
+    }
+
     public Page<InterdepartmentalTypeDTO> findAll() {
         return interdepartmentalTypeRepository.findAll(Pageable.unpaged()).map(interdepartmentalTypeMapper::toDTO);
     }

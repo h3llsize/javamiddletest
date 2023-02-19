@@ -24,4 +24,8 @@ public interface MunicipalServRepository extends JpaRepository<MunicipalServ, Lo
     @Query("select ms from MunicipalServ ms join ms.interdepartmentalRequestEntities ir " +
             "where ir.author = :user")
     List<MunicipalServ> findAllByResponsibleUser(UserEntity user);
+
+    @Query("select ms from MunicipalServ ms " +
+            "where ms.interdepartmentalRequestEntities.size > 0")
+    Page<MunicipalServ> findMsWithRequests(Pageable pageable);
 }

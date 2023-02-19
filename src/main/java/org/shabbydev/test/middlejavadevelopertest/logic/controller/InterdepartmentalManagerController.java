@@ -1,6 +1,7 @@
 package org.shabbydev.test.middlejavadevelopertest.logic.controller;
 
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.*;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.MunicipalServ;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.InterdepartmentalManagerService;
 import org.shabbydev.test.middlejavadevelopertest.logic.service.ValidateService;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,17 @@ public class InterdepartmentalManagerController {
     @PostMapping("/send-to-smev")
     public ResponseEntity<String> sendToSmev(@RequestBody InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
         return interdepartmentalManagerService.save(interdepartmentalRequestDTO);
+    }
+
+    @GetMapping("/ms-with-request")
+    public Page<MunicipalServDTO> findMsWithRequests(HttpServletRequest httpServletRequest) {
+        if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
+            return null;
+
+        if(!validateService.hasAccess(httpServletRequest.getHeader("Authorization")))
+            return null;
+
+        return interdepartmentalManagerService.findMsWithRequests();
     }
 
     @GetMapping("/type-list")
