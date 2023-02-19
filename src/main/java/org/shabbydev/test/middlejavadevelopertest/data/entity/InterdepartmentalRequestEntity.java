@@ -26,7 +26,7 @@ public class InterdepartmentalRequestEntity {
     private Instant date;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private UserEntity author;
+    private UserEntity user;
 
     @Column(nullable = false)
     private int status;
