@@ -36,17 +36,6 @@ public class InterdepartmentalManagerController {
         return interdepartmentalManagerService.save(interdepartmentalRequestDTO);
     }
 
-    @GetMapping("/ms-with-request")
-    public Page<MunicipalServDTO> findMsWithRequests(HttpServletRequest httpServletRequest) {
-        if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
-            return null;
-
-        if(!validateService.hasAccess(httpServletRequest.getHeader("Authorization")))
-            return null;
-
-        return interdepartmentalManagerService.findMsWithRequests();
-    }
-
     @GetMapping("/type-list")
     public Page<InterdepartmentalTypeDTO> getTypes(HttpServletRequest httpServletRequest) {
         if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))

@@ -10,7 +10,6 @@ import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.InterdepartmentalTypeMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.UserMapper;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.UserRequestMapper;
-import org.shabbydev.test.middlejavadevelopertest.data.repo.InterdepartmentalTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 
