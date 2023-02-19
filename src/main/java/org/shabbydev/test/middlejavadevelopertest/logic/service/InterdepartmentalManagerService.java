@@ -2,6 +2,7 @@ package org.shabbydev.test.middlejavadevelopertest.logic.service;
 
 import org.shabbydev.test.middlejavadevelopertest.data.dtos.*;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.InterdepartmentalRequestEntity;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.MunicipalServ;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
 import org.shabbydev.test.middlejavadevelopertest.data.mapper.*;
@@ -83,7 +84,15 @@ public class InterdepartmentalManagerService {
         if(organization == null)
             return null;
 
-        return municipalServRepository.findAllByOrganizationEntity(organization, Pageable.unpaged()).map(municipalServMapper::toDTO);
+        return municipalServRepository.findAllByOrganizationEntity(organization, Pageable.unpaged()).map(m -> {
+            m.getInterdepartmentalRequestEntities().stream().map(ir -> {
+                if(ir.getStatus() < 1) return null;
+                return ir;
+            });
+
+            return municipalServMapper.toDTO(m);
+        });
+
     }
 
     public ResponseEntity<String> createIdm(InterdepartmentalRequestDTO interdepartmentalRequestDTO) {
