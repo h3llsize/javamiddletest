@@ -83,6 +83,8 @@ public class InterdepartmentalManagerController {
         if(!validateService.hasAccess(httpServletRequest.getHeader("Authorization")))
             return null;
 
+        Page<InterdepartmentalRequestDTO> interdepartmentalRequestDTOS = interdepartmentalManagerService.getAllWhoWaitForSuccess();
+
         return interdepartmentalManagerService.getAllWhoWaitForSuccess();
     }
 
