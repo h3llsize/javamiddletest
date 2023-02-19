@@ -62,7 +62,7 @@ public class InterdepartmentalManagerService {
         UserEntity user = validateService.findByHashToken(token);
 
         List<MunicipalServ> municipalServs = municipalServRepository.findAllByResponsibleUser(user);
-        return municipalServs.stream().map(municipalServ -> {
+        List<UserResponsibleRequestDTO> userResponsibleRequestDTOS = municipalServs.stream().map(municipalServ -> {
             UserResponsibleRequestDTO userResponsibleRequestDTO = new UserResponsibleRequestDTO();
             userResponsibleRequestDTO.setOrganizationDTO(organizationMapper.toDTO(municipalServ.getOrganizationEntity()));
             userResponsibleRequestDTO.setInterdepartmentalRequestDTO(municipalServ
@@ -70,6 +70,8 @@ public class InterdepartmentalManagerService {
                     .map(interdepartmentalRequestMapper::toDTO).collect(Collectors.toList()));
             return userResponsibleRequestDTO;
         }).collect(Collectors.toList());
+
+        return userResponsibleRequestDTOS;
     }
 
     public Page<InterdepartmentalTypeDTO> findAll() {

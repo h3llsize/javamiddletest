@@ -26,8 +26,6 @@ public class InterdepartmentalManagerController {
 
     @GetMapping("/get-user-responsible")
     public List<UserResponsibleRequestDTO> userResponsibleRequestDTOS(HttpServletRequest httpServletRequest) {
-        if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
-            return null;
 
         return interdepartmentalManagerService.getUserResponsible(httpServletRequest.getHeader("Authorization"));
     }
