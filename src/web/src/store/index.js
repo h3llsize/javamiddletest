@@ -16,6 +16,7 @@ export default new Vuex.Store({
     token: null,
     validate: '',
     signup: '',
+    authStatus: false,
   },
   mutations: {
     updateAuth: function(state, value) {
@@ -30,6 +31,12 @@ export default new Vuex.Store({
     updateSignup: function(state, value) {
       state.signup = value;
     },
+    updateAuthStatus: function(state) {
+      state.authStatus = true;
+      setTimeout(() => {
+        state.authStatus = false;
+      }, 5000)
+    }
   },
   actions: {
     validateToken(context) {
@@ -37,11 +44,13 @@ export default new Vuex.Store({
       .then(response => {
         context.commit('updateAuth', true);
         context.commit('updateToken', localStorage.getItem('token123'));
+        router.push({ name: 'main' });
       })
       .catch(error => {
         context.commit('updateAuth', false);
         context.commit('updateToken', false);
         localStorage.setItem('token123', false);
+        Vue.prototype.$http.defaults.headers.common['Authorization'] = false;
       })
     },
     login: function(context, user) {
@@ -51,9 +60,10 @@ export default new Vuex.Store({
       })
       .then(response => {
         context.commit('updateAuth', true);
-        context.commit('updateToken', response.data.Authorization);
+        context.commit('updateToken', response.data.token);
         context.commit('updateValidate', true);
-        localStorage.setItem('token123', response.data.Authorization);
+        localStorage.setItem('token123', response.data.token);
+        Vue.prototype.$http.defaults.headers.common['Authorization'] = response.data.token;
         router.push({ name: 'main' });
       })
       .catch(error => {
@@ -61,6 +71,7 @@ export default new Vuex.Store({
         context.commit('updateToken', false);
         context.commit('updateValidate', false);
         localStorage.setItem('token123', false);
+        Vue.prototype.$http.defaults.headers.common['Authorization'] = false;
       })
     },
     signup: function(context, user) {
@@ -73,6 +84,7 @@ export default new Vuex.Store({
         context.commit('updateAuth', false);
         context.commit('updateValidate', false);
         context.commit('updateSignup', true);
+        context.commit('updateAuthStatus');
       })
       .catch(error => {
         context.commit('updateAuth', false);
@@ -80,12 +92,14 @@ export default new Vuex.Store({
         context.commit('updateValidate', true);
         context.commit('updateSignup', false);
         localStorage.setItem('token123', false);
+        Vue.prototype.$http.defaults.headers.common['Authorization'] = false;
       })
     },
     logout: function(context) {
       context.commit('updateAuth', false);
       context.commit('updateToken', false)
       localStorage.setItem('token123', false);
+      Vue.prototype.$http.defaults.headers.common['Authorization'] = false;
     }
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <section class="section" :class="{ active: status }">
-    
+
 
     <div class="container" :class="{ active: status }">
 
@@ -9,7 +9,7 @@
         <div class="imgBx">
           <img class="img" src="@/assets/lock-new.png" alt="">
           <div class="formBx">
-            <form action="#" @submit.prevent="login({ email: signinMail, password: inPass })">
+            <form autocomplete="off" action="#" @submit.prevent="login({ email: signinMail, password: inPass })">
               <h2>Sign In</h2>
               <input type="text" placeholder="Email Adress" v-model="signinMail">
               <input type="password" placeholder="Password" v-model="inPass">
@@ -28,7 +28,7 @@
       <div class="user signupBx">
         <div class="imgBx">
           <div class="formBx">
-            <form action="#" @submit.prevent="signup({ name: upName, email: upEmail, password: upPass })">
+            <form autocomplete="off" action="#" @submit.prevent="signup({ name: upName, email: upEmail, password: upPass })">
               <h2>Create an account</h2>
               <input type="text" placeholder="Username" v-model="upName">
               <input type="email" placeholder="Email Adress" v-model="upEmail">
@@ -247,5 +247,12 @@ section {
       },
       ...mapActions({ signup: 'signup', login: 'login' }),
     },
+    watch: {
+      '$store.state.authStatus': function() {
+        if(this.$store.state.authStatus) {
+          this.status = false;
+        }
+      }
+    }
   }
 </script>
