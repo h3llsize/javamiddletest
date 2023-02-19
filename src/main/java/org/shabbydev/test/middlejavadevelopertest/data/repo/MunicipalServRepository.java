@@ -2,6 +2,7 @@ package org.shabbydev.test.middlejavadevelopertest.data.repo;
 
 import org.shabbydev.test.middlejavadevelopertest.data.entity.MunicipalServ;
 import org.shabbydev.test.middlejavadevelopertest.data.entity.OrganizationEntity;
+import org.shabbydev.test.middlejavadevelopertest.data.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

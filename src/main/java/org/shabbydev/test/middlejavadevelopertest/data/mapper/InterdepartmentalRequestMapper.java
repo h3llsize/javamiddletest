@@ -10,8 +10,9 @@ import org.shabbydev.test.middlejavadevelopertest.data.mapper.decorator.Interdep
 @Mapper(componentModel = "spring", uses = InterdepartmentalRequestMapperDecorator.class)
 public interface InterdepartmentalRequestMapper {
 
+    @Mapping(target = "user", ignore = true)
     InterdepartmentalRequestDTO toDTO(InterdepartmentalRequestEntity interdepartmentalRequestEntity);
-
+    @Mapping(target = "user", ignore = true)
     InterdepartmentalRequestEntity toEntity(InterdepartmentalRequestDTO interdepartmentalRequestDTO);
 
 }

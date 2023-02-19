@@ -39,6 +39,11 @@ public class UserEntity {
         this.organizationEntity = organization;
         return this;
     }
+
+    public UserEntity interdepartmentalRequest(InterdepartmentalRequestEntity interdepartmentalRequestEntity) {
+        this.requestEntities.add(interdepartmentalRequestEntity);
+        return this;
+    }
     @Column(nullable = false)
     private int role;
 }

@@ -13,7 +13,7 @@ public class InterdepartmentalRequestDTO {
 
     private Instant date;
 
-    private UserDTO userDTO;
+    private UserDtoRequest user;
 
     private MunicipalServDTO municipalServ;
 

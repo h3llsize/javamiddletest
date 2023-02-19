@@ -59,6 +59,14 @@ public class InterdepartmentalManagerController {
         return interdepartmentalManagerService.createMunicipalServ(municipalServDTO);
     }
 
+    @GetMapping("/users")
+    public Page<UserDtoRequest> getAllUsers(HttpServletRequest httpServletRequest) {
+        if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
+            return null;
+
+        return interdepartmentalManagerService.findAllUsers();
+    }
+
     @GetMapping("/get-staff")
     public Set<UserDTO> getStaff(HttpServletRequest httpServletRequest) {
         if(!validateService.validate(httpServletRequest.getHeader("Authorization"), httpServletRequest.getRemoteAddr()))
