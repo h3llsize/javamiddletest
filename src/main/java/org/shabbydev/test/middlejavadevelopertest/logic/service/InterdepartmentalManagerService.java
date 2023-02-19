@@ -63,7 +63,7 @@ public class InterdepartmentalManagerService {
     }
 
     public ResponseEntity<String> acceptIDMRequest(Long id) {
-        interdepartmentalRequestRepository.findById(id).orElseGet(null).status(1);
+       interdepartmentalRequestRepository.save(interdepartmentalRequestRepository.findById(id).orElseGet(null).status(1));
         return ResponseEntity.ok("Статус запроса изменён");
     }
 
